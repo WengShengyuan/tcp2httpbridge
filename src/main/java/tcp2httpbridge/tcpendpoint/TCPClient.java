@@ -21,12 +21,4 @@ public class TCPClient {
 	    socket.close(); //关闭Socket连接  
 	}
 	
-	public static void main(String[] args){
-		try {
-			send("127.0.0.1",1234,"content");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

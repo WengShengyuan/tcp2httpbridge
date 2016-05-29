@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tcp2httpbridge.common.StaticValue;
 import tcp2httpbridge.httpendpoint.HTTPServer;
 import tcp2httpbridge.tcpendpoint.TCPServer;
 
@@ -14,7 +15,7 @@ public class App {
 	public static void main(String[] args) {
 		try {
 			HTTPServer.start();
-			TCPServer.startServer(1234, TCPServer.class);
+			TCPServer.startServer(StaticValue.PARAM.TCPPORT, TCPServer.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

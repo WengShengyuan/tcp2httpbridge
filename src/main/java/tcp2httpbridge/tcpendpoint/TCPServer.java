@@ -1,14 +1,17 @@
 package tcp2httpbridge.tcpendpoint;
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tcp2httpbridge.httpendpoint.HTTPServer;
+import tcp2httpbridge.common.StaticValue;
+import tcp2httpbridge.httpendpoint.HttpSender;
 
 public class TCPServer extends Thread{
 
@@ -17,9 +20,20 @@ public class TCPServer extends Thread{
 	
 	public void run() {
 		try {
-			DataInputStream dis = new DataInputStream(socket.getInputStream()); //获取客户端Socket对象的输入流
-			logger.info("TCP server 收到信息 : "+dis.readUTF());
-			dis.close();
+			InputStream is = socket.getInputStream();
+			byte[] buf = new byte[StaticValue.PARAM.BUFFERSIZE];  
+			int length = is.read(buf);
+			byte[] data = new byte[length];
+			for(int i=0;i<length;i++){
+				data[i] = buf[i];
+			}
+			logger.info("TCP server 接收到数据: " + new String(data));
+			String request = new String(data); 
+			
+			String result = HttpSender.send("http://127.0.0.1:8888/tcp2httpbridge/zabbix", data);
+			
+			System.out.println(result);  
+			is.close();
 			socket.close();
 		} catch (IOException e) {
 			logger.error("接收TCP数据出现错误", e);

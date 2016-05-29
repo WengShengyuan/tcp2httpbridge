@@ -1,5 +1,6 @@
 package tcp2httpbridge.httpendpoint.handler;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +21,14 @@ public class ZabbixHandler extends MyHandler{
 	@Override
 	public void doPost(MyRequest request, MyResponse response) {
 		logger.info("接收请求:"+ request.getReuestURI().getPath());
+		String enStr = request.getParamter("enStr");
+		logger.info("获取字符串:"+enStr);
+		Base64 base64 = new Base64();
+		byte[] dec = base64.decode(enStr.getBytes());
+		String deStr = new String(dec);
+		logger.info("解密后:"+deStr);
 		
-		response.write("success");
+		response.write(deStr);
 	}
 
 
