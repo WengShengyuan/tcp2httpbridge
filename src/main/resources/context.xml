@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<httpServer context="/tcp2httpbridge">
+
+	<handler>  
+        <handler-class>tcp2httpbridge.httpendpoint.handler.TestHandler</handler-class>  
+        <url-pattern>/test</url-pattern>  
+    </handler>
+  
+</httpServer>  
