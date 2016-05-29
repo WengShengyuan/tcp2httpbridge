@@ -7,9 +7,9 @@ import tcp2httpbridge.httpendpoint.handler.core.MyHandler;
 import tcp2httpbridge.httpendpoint.handler.core.MyRequest;
 import tcp2httpbridge.httpendpoint.handler.core.MyResponse;
 
-public class TestHandler extends MyHandler{
+public class ZabbixHandler extends MyHandler{
 	
-	private static final Logger logger = LoggerFactory.getLogger(TestHandler.class);  
+	private static final Logger logger = LoggerFactory.getLogger(ZabbixHandler.class);  
 
 	
 	@Override
@@ -21,8 +21,7 @@ public class TestHandler extends MyHandler{
 	public void doPost(MyRequest request, MyResponse response) {
 		logger.info("接收请求:"+ request.getReuestURI().getPath());
 		
-		String string = request.getParamter("string");
-		response.write("get: "+string);
+		response.write("success");
 	}
 
 

@@ -2,8 +2,8 @@
 <httpServer context="/tcp2httpbridge">
 
 	<handler>  
-        <handler-class>tcp2httpbridge.httpendpoint.handler.TestHandler</handler-class>  
-        <url-pattern>/test</url-pattern>  
+        <handler-class>tcp2httpbridge.httpendpoint.handler.ZabbixHandler</handler-class>  
+        <url-pattern>/zabbix</url-pattern>  
     </handler>
   
 </httpServer>  
