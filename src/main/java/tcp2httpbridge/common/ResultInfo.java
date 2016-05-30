@@ -3,7 +3,7 @@ package tcp2httpbridge.common;
 import java.io.Serializable;
 import java.util.HashMap;
 
-public class ResultInfo<T> implements Serializable{
+public class ResultInfo implements Serializable{
 
 	/**
 	 * 
@@ -12,7 +12,7 @@ public class ResultInfo<T> implements Serializable{
 
 	private int stateId; // 状态
 	private String errorMsg = ""; // 错误信息
-	private HashMap<String, T> map = new HashMap<String, T>();
+	private HashMap<String, byte[]> map = new HashMap<String, byte[]>();
 	
 
 	public int getStateId() {
@@ -31,15 +31,15 @@ public class ResultInfo<T> implements Serializable{
 		this.errorMsg = errorMsg;
 	}
 	
-	public T get(String key){
+	public byte[] get(String key){
 		return map.get(key);
 	}
 	
-	public T put(String key ,T t){
+	public byte[] put(String key ,byte[] t){
 		return map.put(key, t);
 	}
 
-	public HashMap<String, T> getMap() {
+	public HashMap<String, byte[]> getMap() {
 		return map;
 	}
 

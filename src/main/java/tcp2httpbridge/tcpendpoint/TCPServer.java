@@ -30,7 +30,7 @@ public class TCPServer extends Thread{
 			}
 			logger.info("TCP server 接收到数据: " + new String(data));
 			socket.shutdownInput();
-			ResultInfo<byte[]> result = HttpSender.send(
+			ResultInfo result = HttpSender.send(
 					ConfigLoader.getInstance().getValue("remote.http.server")+":"+
 					ConfigLoader.getInstance().getValue("remote.http.port")+"/"+
 					ConfigLoader.getInstance().getValue("app.project")+"/"+

@@ -29,8 +29,8 @@ public class HttpSender {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static ResultInfo<byte[]> send(String url, byte[] content) throws Exception {
-		ResultInfo<byte[]> result = new ResultInfo<byte[]>();
+	public static ResultInfo send(String url, byte[] content) throws Exception {
+		ResultInfo result = new ResultInfo();
 		HttpClient httpClient = HttpClients.createDefault();
 		CloseableHttpResponse httpResponse = null;
 		try {

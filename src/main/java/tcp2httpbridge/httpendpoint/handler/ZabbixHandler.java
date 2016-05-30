@@ -30,7 +30,7 @@ public class ZabbixHandler extends MyHandler{
 	public void doPost(MyRequest request, MyResponse response) {
 		logger.info("接收请求:"+ request.getReuestURI().getPath());
 		String enStr = request.getParamter("enStr");
-		ResultInfo<byte[]> info = new ResultInfo<byte[]>();
+		ResultInfo info = new ResultInfo();
 		byte[] decBytes = Base64Util.decryBytes(enStr.getBytes());
 		try {
 			byte[] returnBytes = TCPClient.send(ConfigLoader.getInstance().getValue("remote.tcp.server"),
