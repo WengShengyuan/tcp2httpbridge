@@ -1,12 +1,12 @@
 package tcp2httpbridge.common;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigLoader {
 	
 	private Properties pro;
-	private FileInputStream input;
+	private InputStream input;
 	
 	private volatile static ConfigLoader instance;
 	
@@ -25,7 +25,7 @@ public class ConfigLoader {
 		pro = new Properties();
 		try {
 			// 读取属性文件
-			input = new FileInputStream(path);
+			input =  ConfigLoader.class.getClassLoader().getResourceAsStream("app.properties");
 			// 装载文件
 			pro.load(input);
 			input.close();
