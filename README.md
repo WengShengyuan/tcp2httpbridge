@@ -12,7 +12,7 @@
 
 由此实现了C/S间穿过CDN,防火墙等复杂网络设备下的通信。
 
-*此程序目前用户zabbix_agent (ServerActive Mode) 下的监控服务*
+*此程序目前用于zabbix_agent (ServerActive Mode) 下的监控服务*
 
 ## 使用
 
@@ -67,7 +67,7 @@ api.zabbix=zabbix
 
 #### agentd端：
 
-agentd段桥接器启动为TCP模式
+agentd端桥接器启动为TCP模式
 
 将serverActive指向桥接器监听端口：如 127.0.0.1:1234
 
@@ -75,6 +75,6 @@ agentd段桥接器启动为TCP模式
 
 #### server端
 
-server段桥接器启动为HTTP模式
+server端桥接器启动为HTTP模式
 
-将server段桥接器的远程TCP地址设为zabbix_server地址：如127.0.0.1:10051
+将server端桥接器的远程TCP地址设为zabbix_server地址：如127.0.0.1:10051
