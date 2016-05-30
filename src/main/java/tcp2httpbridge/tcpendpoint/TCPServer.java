@@ -9,8 +9,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tcp2httpbridge.common.ConfigLoader;
 import tcp2httpbridge.common.ResultInfo;
-import tcp2httpbridge.common.StaticValue;
 import tcp2httpbridge.common.utils.Base64Util;
 import tcp2httpbridge.httpendpoint.HttpSender;
 
@@ -22,7 +22,7 @@ public class TCPServer extends Thread{
 	public void run() {
 		try {
 			InputStream is = socket.getInputStream();
-			byte[] buf = new byte[StaticValue.PARAM.BUFFERSIZE];  
+			byte[] buf = new byte[Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxbuffer"))];  
 			int length = is.read(buf);
 			byte[] data = new byte[length];
 			for(int i=0;i<length;i++){
@@ -31,10 +31,11 @@ public class TCPServer extends Thread{
 			logger.info("TCP server 接收到数据: " + new String(data));
 			socket.shutdownInput();
 			ResultInfo<byte[]> result = HttpSender.send(
-					StaticValue.PARAM.HTTPSERVER+":"+
-					StaticValue.PARAM.HTTPPORT+"/"+
-					StaticValue.URL.ROOT+"/"+
-					StaticValue.URL.ZABBIX, data);
+					ConfigLoader.getInstance().getValue("remote.http.server")+":"+
+					ConfigLoader.getInstance().getValue("remote.http.port")+"/"+
+					ConfigLoader.getInstance().getValue("app.project")+"/"+
+					ConfigLoader.getInstance().getValue("api.zabbix"), data);
+			
 			if(result.getStateId()<0){
 				logger.error("状态码不为0,"+result.getErrorMsg());
 			} else {

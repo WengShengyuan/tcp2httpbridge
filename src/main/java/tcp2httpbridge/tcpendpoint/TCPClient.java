@@ -8,7 +8,7 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tcp2httpbridge.common.StaticValue;
+import tcp2httpbridge.common.ConfigLoader;
 
 public class TCPClient {
 	
@@ -27,7 +27,7 @@ public class TCPClient {
 		Socket socket = new Socket(ip, port);
 		OutputStream os = socket.getOutputStream();
 		InputStream is = socket.getInputStream();
-		byte[] buf = new byte[StaticValue.PARAM.BUFFERSIZE];
+		byte[] buf = new byte[Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxbuffer"))];
 		os.write(content);
 		os.flush();
 		socket.shutdownOutput();

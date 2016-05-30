@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.spi.HttpServerProvider;
 
-import tcp2httpbridge.common.StaticValue;
+import tcp2httpbridge.common.ConfigLoader;
 import tcp2httpbridge.httpendpoint.handler.core.ContextLoader;
 import tcp2httpbridge.httpendpoint.handler.core.CoreHandler;
 
@@ -20,11 +20,14 @@ public class HTTPServer {
 	public static void start() throws IOException {
 		ContextLoader.load();  
         HttpServerProvider provider = HttpServerProvider.provider();  
-        HttpServer httpserver =provider.createHttpServer(new InetSocketAddress(StaticValue.PARAM.HTTPPORT), StaticValue.PARAM.MAXHTTP);//监听端口8080,能同时接 受100个请求  
+        HttpServer httpserver =provider.createHttpServer(
+        		new InetSocketAddress(Integer.parseInt(ConfigLoader.getInstance().getValue("local.http.port"))), 
+        		Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxhttphandler")));
+        
         httpserver.createContext(ContextLoader.contextPath, new CoreHandler());   
         httpserver.setExecutor(null);  
         httpserver.start();  
-        logger.info("端口开启成功 :" + StaticValue.PARAM.HTTPPORT);
+        logger.info("端口开启成功 :" + Integer.parseInt(ConfigLoader.getInstance().getValue("local.http.port")));
 	}
 	
 

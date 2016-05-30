@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 
+import tcp2httpbridge.common.ConfigLoader;
 import tcp2httpbridge.common.ResultInfo;
 import tcp2httpbridge.common.StaticValue;
 import tcp2httpbridge.common.utils.Base64Util;
@@ -32,7 +33,8 @@ public class ZabbixHandler extends MyHandler{
 		ResultInfo<byte[]> info = new ResultInfo<byte[]>();
 		byte[] decBytes = Base64Util.decryBytes(enStr.getBytes());
 		try {
-			byte[] returnBytes = TCPClient.send(StaticValue.URL.TCPSERVER, StaticValue.URL.TCPPORT, decBytes);
+			byte[] returnBytes = TCPClient.send(ConfigLoader.getInstance().getValue("remote.tcp.server"),
+					Integer.parseInt(ConfigLoader.getInstance().getValue("remote.tcp.port")), decBytes);
 			info.put("enStr", Base64Util.encryBytes(returnBytes));
 		} catch (IOException e) {
 			info.setStateId(-1);
