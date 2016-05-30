@@ -17,17 +17,23 @@ public class HTTPServer {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HTTPServer.class);
 	
-	public static void start() throws IOException {
-		ContextLoader.load();  
-        HttpServerProvider provider = HttpServerProvider.provider();  
-        HttpServer httpserver =provider.createHttpServer(
-        		new InetSocketAddress(Integer.parseInt(ConfigLoader.getInstance().getValue("local.http.port"))), 
-        		Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxhttphandler")));
-        
-        httpserver.createContext(ContextLoader.contextPath, new CoreHandler());   
-        httpserver.setExecutor(null);  
-        httpserver.start();  
-        logger.info("端口开启成功 :" + Integer.parseInt(ConfigLoader.getInstance().getValue("local.http.port")));
+	public static void start() {
+		try {
+			ContextLoader.load();  
+			HttpServerProvider provider = HttpServerProvider.provider();  
+			HttpServer httpserver =provider.createHttpServer(
+					new InetSocketAddress(Integer.parseInt(ConfigLoader.getInstance().getValue("local.http.port"))), 
+					Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxhttphandler")));
+			
+			httpserver.createContext(ContextLoader.contextPath, new CoreHandler());   
+			httpserver.setExecutor(null);  
+			httpserver.start();  
+			logger.info("HTTP 服务开启成功 :" + Integer.parseInt(ConfigLoader.getInstance().getValue("local.http.port")));
+		} catch (NumberFormatException e) {
+			logger.error("HTTP 服务开启失败",e);
+		} catch (IOException e) {
+			logger.error("HTTP 服务开启失败",e);
+		}
 	}
 	
 
