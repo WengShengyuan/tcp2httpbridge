@@ -44,6 +44,7 @@ public class TCPServer extends Thread{
 				logger.info("byte[]="+en);
 				byte[] de = Base64Util.decryBytes(en);
 				logger.info("de byte[]="+de);
+				logger.info("TCP 写入:"+new String(de));
 				OutputStream os = socket.getOutputStream();
 				os.write(de);
 				os.flush();
