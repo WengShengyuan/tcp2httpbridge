@@ -38,5 +38,9 @@ public class ResultInfo<T> implements Serializable{
 	public T put(String key ,T t){
 		return map.put(key, t);
 	}
-	
+
+	public HashMap<String, T> getMap() {
+		return map;
+	}
+
 }

@@ -40,6 +40,7 @@ public class HttpSender {
 			HttpEntity entity = httpResponse.getEntity();
 			if (null != entity) {
 				String r = EntityUtils.toString(entity);
+				logger.info("HTTP 返回:"+r);
 				result = JSON.parseObject(r, ResultInfo.class);
 			}
 			return result;

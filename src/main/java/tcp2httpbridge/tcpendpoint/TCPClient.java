@@ -3,6 +3,7 @@ package tcp2httpbridge.tcpendpoint;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.slf4j.Logger;
@@ -27,17 +28,30 @@ public class TCPClient {
 		Socket socket = new Socket(ip, port);
 		OutputStream os = socket.getOutputStream();
 		InputStream is = socket.getInputStream();
-		byte[] buf = new byte[Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxbuffer"))];
+		
+		logger.info("开始输出socket...");
 		os.write(content);
 		os.flush();
-		socket.shutdownOutput();
-		int length = is.read(buf);
-		byte[] data = new byte[length];
-		for(int i=0;i<length;i++){
-			data[i] = buf[i];
+		logger.info("开始读入socket...");
+		byte[] responseData = new byte[Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxbuffer"))];
+		int readCount = 0;
+		while (true) {
+			int read = is.read(responseData, 0, responseData.length - readCount);
+			if (read <= 0) {
+				break;
+			}
+			readCount += read;
 		}
-		logger.info("接收返回:"+new String(data));
-		return data;
+		byte[] r = new byte[readCount];
+		for(int i = 0 ; i < readCount; i ++){
+			r[i] = responseData[i];
+		}
+		logger.info("关闭socket...");
+		os.close();
+		is.close();
+		socket.close();
+		logger.info("读入socket结束，接收返回:"+new String(r));
+		return r;
 	}
 	
 }
