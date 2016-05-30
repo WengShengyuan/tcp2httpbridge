@@ -35,7 +35,7 @@ public class ZabbixHandler extends MyHandler{
 		try {
 			byte[] returnBytes = TCPClient.send(ConfigLoader.getInstance().getValue("remote.tcp.server"),
 					Integer.parseInt(ConfigLoader.getInstance().getValue("remote.tcp.port")), decBytes);
-			info.put("enStr", Base64Util.encryBytes(returnBytes));
+			info.setContent(Base64Util.encryBytes(returnBytes).toString());
 		} catch (IOException e) {
 			logger.error("TCPClient 发送数据异常",e);
 			info.setStateId(-1);

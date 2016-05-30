@@ -40,7 +40,7 @@ public class TCPServer extends Thread{
 				logger.error("状态码不为0,"+result.getErrorMsg());
 			} else {
 				logger.info("HTTP返回:"+result);
-				byte[] en = result.get("enStr");
+				byte[] en = result.getContent().getBytes();
 				logger.info("byte[]="+en);
 				byte[] de = Base64Util.decryBytes(en);
 				logger.info("de byte[]="+de);
