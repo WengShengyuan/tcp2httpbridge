@@ -1,12 +1,19 @@
 package tcp2httpbridge.httpendpoint.handler;
 
-import org.apache.commons.codec.binary.Base64;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONObject;
+
+import tcp2httpbridge.common.ResultInfo;
+import tcp2httpbridge.common.StaticValue;
+import tcp2httpbridge.common.utils.Base64Util;
 import tcp2httpbridge.httpendpoint.handler.core.MyHandler;
 import tcp2httpbridge.httpendpoint.handler.core.MyRequest;
 import tcp2httpbridge.httpendpoint.handler.core.MyResponse;
+import tcp2httpbridge.tcpendpoint.TCPClient;
 
 public class ZabbixHandler extends MyHandler{
 	
@@ -22,13 +29,16 @@ public class ZabbixHandler extends MyHandler{
 	public void doPost(MyRequest request, MyResponse response) {
 		logger.info("接收请求:"+ request.getReuestURI().getPath());
 		String enStr = request.getParamter("enStr");
-		logger.info("获取字符串:"+enStr);
-		Base64 base64 = new Base64();
-		byte[] dec = base64.decode(enStr.getBytes());
-		String deStr = new String(dec);
-		logger.info("解密后:"+deStr);
-		
-		response.write(deStr);
+		ResultInfo<byte[]> info = new ResultInfo<byte[]>();
+		byte[] decBytes = Base64Util.decryBytes(enStr.getBytes());
+		try {
+			byte[] returnBytes = TCPClient.send(StaticValue.URL.TCPSERVER, StaticValue.URL.TCPPORT, decBytes);
+			info.put("enStr", Base64Util.encryBytes(returnBytes));
+		} catch (IOException e) {
+			info.setStateId(-1);
+			info.setErrorMsg(e.toString());
+		}
+		response.write(JSONObject.toJSONString(info));
 	}
 
 

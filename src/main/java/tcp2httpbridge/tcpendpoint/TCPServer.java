@@ -1,16 +1,17 @@
 package tcp2httpbridge.tcpendpoint;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tcp2httpbridge.common.ResultInfo;
 import tcp2httpbridge.common.StaticValue;
+import tcp2httpbridge.common.utils.Base64Util;
 import tcp2httpbridge.httpendpoint.HttpSender;
 
 public class TCPServer extends Thread{
@@ -28,14 +29,24 @@ public class TCPServer extends Thread{
 				data[i] = buf[i];
 			}
 			logger.info("TCP server 接收到数据: " + new String(data));
-			String request = new String(data); 
-			
-			String result = HttpSender.send("http://127.0.0.1:8888/tcp2httpbridge/zabbix", data);
-			
-			System.out.println(result);  
-			is.close();
+			socket.shutdownInput();
+			ResultInfo<byte[]> result = HttpSender.send(
+					StaticValue.PARAM.HTTPSERVER+":"+
+					StaticValue.PARAM.HTTPPORT+"/"+
+					StaticValue.URL.ROOT+"/"+
+					StaticValue.URL.ZABBIX, data);
+			if(result.getStateId()<0){
+				logger.error("状态码不为0,"+result.getErrorMsg());
+			} else {
+				logger.info("HTTP返回:"+new String(Base64Util.decryBytes(result.get("enStr")))+",开始写入TCP");
+				OutputStream os = socket.getOutputStream();
+				os.write(Base64Util.decryBytes(result.get("enStr")));
+				os.flush();
+				socket.shutdownOutput();
+			}
+			logger.info("完成TCP交互，退出socket");
 			socket.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("接收TCP数据出现错误", e);
 		}
 	}
@@ -50,9 +61,8 @@ public class TCPServer extends Thread{
 				try {
 					// 在这里一直等待链接
 					e = serverSocket.accept();
-					
 					// 一旦链接，将socket转入新进程进行处理，主进程重新监听新请求
-					logger.info("建立连接...");
+					logger.info("建立新连接...");
 					TCPServer server = (TCPServer) obj.newInstance();
 					server.socket = e;
 					server.start();

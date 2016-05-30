@@ -2,47 +2,54 @@ package tcp2httpbridge.httpendpoint;
 
 import java.io.IOException;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
+import tcp2httpbridge.common.ResultInfo;
+import tcp2httpbridge.common.utils.Base64Util;
+import tcp2httpbridge.httpendpoint.handler.ZabbixHandler;
 
 public class HttpSender {
-	
-	public static String send(String url, byte[] content){
-		
-		Base64 base64 = new Base64();
-		byte[] encrypted = base64.encode(content);
-		String enStr = new String(encrypted);
-		System.out.println("encrypted : "+ enStr);
-		String r = "";
-		/* 1 生成 HttpClinet 对象并设置参数 */
-	    HttpClient httpClient = HttpClients.createDefault();
-	    CloseableHttpResponse httpResponse = null;
-	    try {
-            //用get方法发送http请求
-            HttpGet get = new HttpGet(url+"?enStr="+enStr);
-            System.out.println("执行get请求:...."+get.getURI());
-            //发送get请求
-            httpResponse = (CloseableHttpResponse) httpClient.execute(get);
-                //response实体
-                HttpEntity entity = httpResponse.getEntity();
-                if (null != entity){
-                    r=  EntityUtils.toString(entity);
-                }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        	try {
-				httpResponse.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+	private static final Logger logger = LoggerFactory.getLogger(HttpSender.class);
+
+	/**
+	 * 将TCPbyte转为HTTP请求发出，并接收返回
+	 * @param url http服务地址
+	 * @param content 未加密的byte[]
+	 * @return ResultInfo<byte[]>, byte[] 为未解密的byte
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static ResultInfo<byte[]> send(String url, byte[] content) throws Exception {
+		ResultInfo<byte[]> result = new ResultInfo<byte[]>();
+		HttpClient httpClient = HttpClients.createDefault();
+		CloseableHttpResponse httpResponse = null;
+		try {
+			HttpGet get = new HttpGet(url + "?enStr=" + new String(Base64Util.encryBytes(content)));
+			httpResponse = (CloseableHttpResponse) httpClient.execute(get);
+			// response实体
+			HttpEntity entity = httpResponse.getEntity();
+			if (null != entity) {
+				String r = EntityUtils.toString(entity);
+				result = JSON.parseObject(r, ResultInfo.class);
 			}
-        }
-	    return r;
+			return result;
+		} catch (Exception e) {
+			logger.error("http请求错误", e);
+			throw e;
+		} finally {
+			httpResponse.close();
+			httpClient = null;
+		}
 	}
 
 }
