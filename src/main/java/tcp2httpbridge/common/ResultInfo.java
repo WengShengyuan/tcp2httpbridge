@@ -12,7 +12,7 @@ public class ResultInfo implements Serializable{
 
 	private int stateId; // 状态
 	private String errorMsg = ""; // 错误信息
-	private HashMap<String, byte[]> map = new HashMap<String, byte[]>();
+	private HashMap<String, String> map = new HashMap<String, String>();
 	
 
 	public int getStateId() {
@@ -32,14 +32,14 @@ public class ResultInfo implements Serializable{
 	}
 	
 	public byte[] get(String key){
-		return map.get(key);
+		return map.get(key).getBytes();
 	}
 	
-	public byte[] put(String key ,byte[] t){
-		return map.put(key, t);
+	public String put(String key ,byte[] t){
+		return map.put(key, t.toString());
 	}
 
-	public HashMap<String, byte[]> getMap() {
+	public HashMap<String, String> getMap() {
 		return map;
 	}
 
