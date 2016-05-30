@@ -1,8 +1,6 @@
 package tcp2httpbridge.httpendpoint.handler.core;
 
-import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +17,6 @@ public class ContextLoader {
     public static void load(){  
         try{  
         	InputStream in = ContextLoader.class.getClassLoader().getResourceAsStream("context.xml");
-//        	File file = new File(resource.getFile());
-//            Document doc = XmlUtils.load(Context.class.getResource("/").getPath()+"context.xml");  
             Document doc = XmlUtils.load(in);  
             Element root = doc.getDocumentElement();  
               
