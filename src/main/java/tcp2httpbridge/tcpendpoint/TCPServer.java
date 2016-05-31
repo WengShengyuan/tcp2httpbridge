@@ -39,13 +39,17 @@ public class TCPServer extends Thread{
 			if(result.getStateId()<0){
 				logger.error("状态码不为0,"+result.getErrorMsg());
 			} else {
-				byte[] en = result.getContent().getBytes();
-				byte[] de = Base64Util.decryBytes(en);
-				logger.info("TCP 写入:"+new String(de));
-				OutputStream os = socket.getOutputStream();
-				os.write(de);
-				os.flush();
-				socket.shutdownOutput();
+				if(result.getContent().isEmpty()){
+					logger.info("返回的content为空，不处理本次交互");
+				} else {
+					byte[] en = result.getContent().getBytes();
+					byte[] de = Base64Util.decryBytes(en);
+					logger.info("TCP 写入:"+new String(de));
+					OutputStream os = socket.getOutputStream();
+					os.write(de);
+					os.flush();
+					socket.shutdownOutput();
+				}
 			}
 			logger.info("完成TCP交互，退出socket");
 			socket.close();
