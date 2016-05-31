@@ -24,15 +24,14 @@ public class TCPClient {
 	 * @throws IOException
 	 */
 	public static byte[] send(String ip, int port, byte[] content) throws IOException {
-		logger.info("发送:"+new String(content)+"->"+ip+":"+port);
+		logger.info("Socket Client准备连接 : "+ip+":"+port);
 		Socket socket = new Socket(ip, port);
 		OutputStream os = socket.getOutputStream();
 		InputStream is = socket.getInputStream();
 		
-		logger.info("开始输出socket...");
+		logger.info("socket输出:"+new String(content));
 		os.write(content);
 		os.flush();
-		logger.info("开始读入socket...");
 		byte[] responseData = new byte[Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxbuffer"))];
 		int readCount = 0;
 		while (true) {
@@ -46,11 +45,10 @@ public class TCPClient {
 		for(int i = 0 ; i < readCount; i ++){
 			r[i] = responseData[i];
 		}
-		logger.info("关闭socket...");
+		logger.info("socket读入:"+new String(r));
 		os.close();
 		is.close();
 		socket.close();
-		logger.info("读入socket结束，接收返回:"+new String(r));
 		return r;
 	}
 	

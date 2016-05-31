@@ -39,7 +39,6 @@ public class TCPServer extends Thread{
 			if(result.getStateId()<0){
 				logger.error("状态码不为0,"+result.getErrorMsg());
 			} else {
-				logger.info("HTTP返回:"+result);
 				byte[] en = result.getContent().getBytes();
 				byte[] de = Base64Util.decryBytes(en);
 				logger.info("TCP 写入:"+new String(de));
