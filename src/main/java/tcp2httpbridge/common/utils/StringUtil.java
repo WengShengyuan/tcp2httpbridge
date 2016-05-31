@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtils {
+public class StringUtil {
 	/**
 	 * Converts a line of text into an array of lower case words. Words are
 	 * delimited by the following characters: , .\r\n:/\+

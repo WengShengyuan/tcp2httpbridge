@@ -7,7 +7,7 @@ import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import tcp2httpbridge.common.utils.XmlUtils;
+import tcp2httpbridge.common.utils.XmlUtil;
 
 public class ContextLoader {
 	
@@ -17,14 +17,14 @@ public class ContextLoader {
     public static void load(){  
         try{  
         	InputStream in = ContextLoader.class.getClassLoader().getResourceAsStream("context.xml");
-            Document doc = XmlUtils.load(in);  
+            Document doc = XmlUtil.load(in);  
             Element root = doc.getDocumentElement();  
               
-            contextPath = XmlUtils.getAttribute(root,"context");  
-            Element[] handlers = XmlUtils.getChildrenByName(root, "handler");  
+            contextPath = XmlUtil.getAttribute(root,"context");  
+            Element[] handlers = XmlUtil.getChildrenByName(root, "handler");  
             for(Element ele : handlers){  
-                String handle_class = XmlUtils.getChildText(ele, "handler-class");  
-                String url_pattern = XmlUtils.getChildText(ele, "url-pattern");  
+                String handle_class = XmlUtil.getChildText(ele, "handler-class");  
+                String url_pattern = XmlUtil.getChildText(ele, "url-pattern");  
                   
                 Class<?> cls = Class.forName(handle_class);  
                 Object newInstance = cls.newInstance();  

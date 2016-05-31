@@ -39,7 +39,7 @@ import org.xml.sax.InputSource;
  *  @author "blueSummer"  DateTime 2015-3-25 下午5:44:32    
  *  @version 1.0 
  */
-public class XmlUtils {
+public class XmlUtil {
 	public static final String BR = System.getProperty("line.separator");
 
 	/**
@@ -150,7 +150,7 @@ public class XmlUtils {
 			throws Exception {
 		domContent = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + BR
 				+ domContent;
-		return XmlUtils.loadString(domContent);
+		return XmlUtil.loadString(domContent);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class XmlUtils {
 	 * @return String
 	 */
 	public static String getTextByFullName(Document doc, String fullname) {
-		String path[] = StringUtils.toStringArray(fullname, ".");
+		String path[] = StringUtil.toStringArray(fullname, ".");
 		Element e = doc.getDocumentElement();
 		for (int i = 1; i < path.length; i++) {
 			e = getChildByName(e, path[i]);
@@ -203,7 +203,7 @@ public class XmlUtils {
 	 * @return String
 	 */
 	public static String getTextByFullName(Element parent, String fullname) {
-		String path[] = StringUtils.toStringArray(fullname, ".");
+		String path[] = StringUtil.toStringArray(fullname, ".");
 		Element e = parent;
 		for (int i = 0; i < path.length; i++) {
 			e = getChildByName(e, path[i]);
