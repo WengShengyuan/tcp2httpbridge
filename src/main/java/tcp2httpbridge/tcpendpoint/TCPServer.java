@@ -33,7 +33,6 @@ public class TCPServer extends Thread{
 			ResultInfo result = HttpSender.post(
 					ConfigLoader.getInstance().getValue("remote.http.server")+":"+
 					ConfigLoader.getInstance().getValue("remote.http.port")+"/"+
-					ConfigLoader.getInstance().getValue("app.project")+"/"+
 					ConfigLoader.getInstance().getValue("api.zabbix"), data);
 			
 			if(result.getStateId()<0){
