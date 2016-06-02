@@ -25,6 +25,8 @@
 java -jar tcp2httpbridge.jar HTTP
 // 启动客户端TCP服务
 java -jar tcp2httpbridge.jar TCP
+// 同时启动TCP和HTTP服务
+java -jar tcp2httpbridge.jar ALL
 
 ```
 
@@ -44,6 +46,8 @@ app.maxhttphandler=100
 
 # TCP模式时，本地TCP监听端口(zabbix_agent配置中将ServerActive端口改为此即可被监听)
 local.tcp.port=1234
+# TCP交互超时
+local.tcp.timeout=10
 # HTTP模式时，本地HTTP监听端口
 local.http.port=8888
 
@@ -62,6 +66,12 @@ remote.tcp.port=10051
 api.zabbix=zabbix
 
 ```
+
+### 查询参数与运行状况统计信息
+
+要求HTTP服务启动才行，访问地址:health
+
+如：localhost:8888/tcp2httpbridge/health
 
 ### 与zabbix配合
 
