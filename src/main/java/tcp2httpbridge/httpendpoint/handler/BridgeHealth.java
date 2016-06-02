@@ -10,7 +10,7 @@ import tcp2httpbridge.httpendpoint.handler.core.MyResponse;
 
 public class BridgeHealth extends MyHandler {
 
-private static final Logger logger = LoggerFactory.getLogger(ZabbixHandler.class);  
+private static final Logger logger = LoggerFactory.getLogger(BridgeHealth.class);  
 
 	
 	@Override
