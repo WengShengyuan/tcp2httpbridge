@@ -29,6 +29,7 @@ public class TCPServer extends Thread{
 				data[i] = buf[i];
 			}
 			logger.info("TCP server 接收到数据: " + new String(data));
+			logger.info("TCP SERVER buffer 使用率:"+ length / (Double.parseDouble(ConfigLoader.getInstance().getValue("app.maxbuffer"))));
 			socket.shutdownInput();
 			ResultInfo result = HttpSender.post(
 					ConfigLoader.getInstance().getValue("remote.http.server")+":"+

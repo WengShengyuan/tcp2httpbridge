@@ -46,6 +46,7 @@ public class TCPClient {
 			r[i] = responseData[i];
 		}
 		logger.info("socket读入:"+new String(r));
+		logger.info("TCP CLIENT buffer 使用率:"+ readCount / (Double.parseDouble(ConfigLoader.getInstance().getValue("app.maxbuffer"))));
 		os.close();
 		is.close();
 		socket.close();
