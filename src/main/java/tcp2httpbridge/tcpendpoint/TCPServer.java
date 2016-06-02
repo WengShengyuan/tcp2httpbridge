@@ -21,7 +21,10 @@ public class TCPServer extends Thread{
 	
 	public void run() {
 		try {
+			socket.setKeepAlive(true);
+			socket.setSoTimeout(Integer.parseInt(ConfigLoader.getInstance().getValue("local.tcp.timeout"))*1000);
 			InputStream is = socket.getInputStream();
+			double rate = 0.0;
 			byte[] buf = new byte[Integer.parseInt(ConfigLoader.getInstance().getValue("app.maxbuffer"))];  
 			int length = is.read(buf);
 			byte[] data = new byte[length];
@@ -29,7 +32,8 @@ public class TCPServer extends Thread{
 				data[i] = buf[i];
 			}
 			logger.info("TCP server 接收到数据: " + new String(data));
-			logger.info("TCP SERVER buffer 使用率:"+ length / (Double.parseDouble(ConfigLoader.getInstance().getValue("app.maxbuffer"))));
+			rate = length / (Double.parseDouble(ConfigLoader.getInstance().getValue("app.maxbuffer")));
+			logger.info("TCP SERVER buffer 使用率:"+ rate);
 			socket.shutdownInput();
 			ResultInfo result = HttpSender.post(
 					ConfigLoader.getInstance().getValue("remote.http.server")+":"+
@@ -52,9 +56,11 @@ public class TCPServer extends Thread{
 				}
 			}
 			logger.info("完成TCP交互，退出socket");
+			ConfigLoader.getInstance().markSuccess_TCP(rate);
 			socket.close();
 		} catch (Exception e) {
 			logger.error("接收TCP数据出现错误", e);
+			ConfigLoader.getInstance().markFail_TCP();
 		}
 	}
 	

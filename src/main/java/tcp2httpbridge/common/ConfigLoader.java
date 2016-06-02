@@ -7,6 +7,12 @@ public class ConfigLoader {
 	
 	private Properties pro;
 	private InputStream input;
+	private Long successCount_TCP=0L;
+	private Long failCount_TCP=0L;
+	private Double bufferRate_TCP=0.0;
+	private Long successCount_HTTP=0L;
+	private Long failCount_HTTP=0L;
+	private Double bufferRate_HTTP=0.0;
 	
 	private volatile static ConfigLoader instance;
 	
@@ -33,6 +39,50 @@ public class ConfigLoader {
 		
 	}
 	
+	public void markSuccess_TCP(double bufferRate){
+		this.bufferRate_TCP += bufferRate;
+		this.successCount_TCP++;
+	}
+	
+	public void markFail_TCP(){
+		this.failCount_TCP++;
+	}
+	
+	public void markSuccess_HTTP(double bufferRate){
+		this.bufferRate_HTTP+=bufferRate;
+		this.successCount_HTTP++;
+	}
+	
+	public void markFail_HTTP(){
+		this.failCount_HTTP++;
+	}
+	
+	
+	
+	public Long getSuccessCount_TCP() {
+		return successCount_TCP;
+	}
+
+	public Long getFailCount_TCP() {
+		return failCount_TCP;
+	}
+
+	public Double getBufferRate_TCP() {
+		return bufferRate_TCP;
+	}
+
+	public Long getSuccessCount_HTTP() {
+		return successCount_HTTP;
+	}
+
+	public Long getFailCount_HTTP() {
+		return failCount_HTTP;
+	}
+
+	public Double getBufferRate_HTTP() {
+		return bufferRate_HTTP;
+	}
+
 	public String getValue(String key){
 		if (pro.containsKey(key)) {
 			String value = pro.getProperty(key);
@@ -41,5 +91,4 @@ public class ConfigLoader {
 			return "";
 		}
 	}
-
 }

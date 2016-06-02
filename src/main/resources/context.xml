@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>  
-<httpServer context="/tcp2httpbridge">
+<httpServer context="/timertask">
 
 	<handler>  
         <handler-class>tcp2httpbridge.httpendpoint.handler.ZabbixHandler</handler-class>  
         <url-pattern>/zabbix</url-pattern>  
+    </handler>
+  
+  	<handler>  
+        <handler-class>tcp2httpbridge.httpendpoint.handler.BridgeHealth</handler-class>  
+        <url-pattern>/health</url-pattern>  
     </handler>
   
 </httpServer>  
