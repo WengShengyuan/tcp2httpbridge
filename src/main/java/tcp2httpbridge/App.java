@@ -14,13 +14,16 @@ public class App {
 	public static void main(String[] args) {
 		
 		if(args.length<1){
-			System.out.println("USAGE : java -jar tcp2httpbridge.jar [HTTP/TCP]");
+			System.out.println("USAGE : java -jar tcp2httpbridge.jar [HTTP/TCP/ALL]");
 		} else if(args[0].toUpperCase().equals(StaticValue.APPTYPE.HTTP)){
 			HTTPServer.start();
 		} else if(args[0].toUpperCase().equals(StaticValue.APPTYPE.TCP)){
 			TCPServer.startServer(Integer.parseInt(ConfigLoader.getInstance().getValue("local.tcp.port")), TCPServer.class);
+		} else if(args[0].toUpperCase().equals(StaticValue.APPTYPE.ALL)){
+			HTTPServer.start();
+			TCPServer.startServer(Integer.parseInt(ConfigLoader.getInstance().getValue("local.tcp.port")), TCPServer.class);
 		} else {
-			System.out.println("USAGE : java -jar tcp2httpbridge.jar [HTTP/TCP]");
+			System.out.println("USAGE : java -jar tcp2httpbridge.jar [HTTP/TCP/ALL]");
 		}
 	}
 	
